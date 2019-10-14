@@ -1,0 +1,115 @@
+﻿@{
+    ViewData["Title"] = "BuyZubehör";
+
+    // ZubehörListe aus der Viewbag zu einem konkreten Typ casten
+    var zubehörListe = (IEnumerable<Zubehör>)ViewBag.ZubehörListe;
+}
+
+<h1>Zubehör</h1>
+
+<form asp-action="BuyZubehör" asp-controller="Home" method="post">
+    <div class="row">
+        <ul>
+            @foreach (var zubehör in zubehörListe)
+            {
+                <li>
+                    <div class="card" id="cards" style="width: 12rem;">
+                        <input type="checkbox"
+                               id="cb_@zubehör.ZubehörId"
+                               name="zubehörIds"
+                               class="form-check-input"
+                               value="@zubehör.ZubehörId" />
+                        <label for="cb_@zubehör.ZubehörId">
+                            <img src="~/img/@zubehör.ZubehörName@Html.Raw(".jpg")" />
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <strong class="text-danger">@zubehör.ZubehörKosten CHF</strong>
+                                </div>
+                                <div class="d-flex">
+                                    <strong class="">@zubehör.ZubehörName</strong>
+                                </div>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            </div>
+                        </label>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div class="d-flex justify-content-end">
+        <input value="Weiter" type="submit" class="btn btn-primary" />
+    </div>
+</form>
+
+<style>
+/* Zubehör Styles
+-----------------------------------------------------------------*/
+#cards {
+    margin: 5px;
+}
+
+#cards img {
+    margin-left: 20px;
+}
+
+ul {
+   list-style-type: none;
+   padding: 0;
+}
+
+li {
+   display: inline-block;
+}
+
+input[type="checkbox"][id^="cb"] {
+   display: none;
+}
+
+label {
+    padding: 10px;
+    display: block;
+    position: relative;
+    margin: 10px;
+    cursor: pointer;
+}
+
+label:before {
+    background-color: white;
+    color: white;
+    content: " ";
+    display: block;
+    border-radius: 50%;
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    line-height: 28px;
+    transition-duration: 0.4s;
+    transform: scale(0);
+}
+
+label img {
+    height: 100px;
+    width: 100px;
+    transition-duration: 0.2s;
+    transform-origin: 50% 50%;
+}
+
+:checked + label {
+    border-color: #ddd;
+}
+
+:checked + label:before {
+    content: "✓";
+    background-color: grey;
+    transform: scale(1);
+}
+
+:checked + label img {
+    transform: scale(0.9);
+    z-index: -1;
+}
+</style>

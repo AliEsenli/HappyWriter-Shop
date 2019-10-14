@@ -1,0 +1,96 @@
+﻿@model HappyWriter.Models.ViewModels.ProdukteViewModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Home Page";
+
+    var product = (Produkt)ViewBag.cart;
+    var productName = "";
+    decimal productKosten = 0;
+    if (product != null)
+    {
+        productName = product.Name;
+        productKosten = product.Kosten;
+    }
+
+    var zubehörListe = (IEnumerable<KundeZubehör>)ViewBag.zub;
+}
+
+<div>
+    <div class="row">
+        @foreach (var produkt in Model.Produkte)
+        {
+            <div class="col-md-3">
+                <div class="card">
+                    <img class="card-img-top" src="~/img/@produkt.Name@Html.Raw(".jpg")" style="height:162px" alt="Card image cap">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <strong class="text-danger">@produkt.Kosten CHF</strong>
+                        </div>
+                        <div class="d-flex">
+                            <strong class="">@produkt.Name</strong>
+                        </div>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                    <a class="fullSizeOverlay" href="/home/produkt/@produkt.ProduktId"></a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<hr />
+
+<h3 class="mt-4">Shopping Cart</h3>
+
+@if (product != null)
+{
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col" class="border-0 bg-light">
+                        <div class="p-2 px-3 text-uppercase">Product</div>
+                    </th>
+                    <th scope="col" class="border-0 bg-light">
+                        <div class="py-2 text-uppercase">Price</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">
+                        <div class="p-2">
+                            <img src="~/img/@productName@Html.Raw(".jpg")" alt="" width="70" class="img-fluid rounded shadow-sm">
+                            <div class="ml-3 d-inline-block align-middle">
+                                <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block">@productName</a></h5><span class="text-muted font-weight-normal font-italic">Category: Back To School</span>
+                            </div>
+                        </div>
+                    <td class="align-middle"><strong>@productKosten CHF</strong></td>
+                </tr>
+                @if (zubehörListe != null)
+                {
+                    @foreach (var zubehör in zubehörListe)
+                    {
+                        <tr>
+                            <th scope="row">
+                                <div class="p-2">
+                                    <img src="~/img/@zubehör.Zubehör.ZubehörName@Html.Raw(".jpg")" alt="" width="70" class="img-fluid rounded shadow-sm">
+                                    <div class="ml-3 d-inline-block align-middle">
+                                        <h5 class="mb-0">
+                                            <a href="#" class="text-dark d-inline-block">@zubehör.Zubehör.ZubehörName</a>
+                                        </h5>
+                                        <span class="text-muted font-weight-normal font-italic">Category: Back to School</span>
+                                    </div>
+                                </div>
+                            <td class="align-middle"><strong>@zubehör.Zubehör.ZubehörKosten CHF</strong></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-end">
+        <a href="home/bestellübersicht" type="button" class="btn btn-primary">Checkout</a>
+    </div>
+}

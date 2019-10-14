@@ -1,0 +1,70 @@
+﻿@model HappyWriter.Models.ViewModels.CheckoutViewModel
+@{
+    ViewData["Title"] = "Bestellübersicht";
+
+    var totalKosten = Model.TotalKostenZubehör + Model.ProduktKosten;
+}
+
+<h3>1. Lieferadresse</h3>
+<div class="mb-5">@Model.UserName @Model.UserVorname, @Model.Strasse, @Model.Plz, @Model.Ort</div>
+
+
+<h3>2. Bestellübersicht</h3>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col" class="border-0 bg-light">
+                    <div class="p-2 px-3 text-uppercase">Product</div>
+                </th>
+                <th scope="col" class="border-0 bg-light">
+                    <div class="py-2 text-uppercase">Price</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <th scope="row">
+                    <div class="p-2">
+                        <img src="~/img/@Model.ProduktName@Html.Raw(".jpg")" alt="" width="70" class="img-fluid rounded shadow-sm">
+                        <div class="ml-3 d-inline-block align-middle">
+                            <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block">@Model.ProduktName</a></h5><span class="text-muted font-weight-normal font-italic">Category: Back To School</span>
+                        </div>
+                    </div>
+                <td class="align-middle"><strong>@Model.ProduktKosten CHF</strong></td>
+            </tr>
+            @foreach (var zubehör in Model.Zubehöre)
+            {
+                <tr>
+                    <th scope="row">
+                        <div class="p-2">
+                            <img src="~/img/@zubehör.Zubehör.ZubehörName@Html.Raw(".jpg")" alt="" width="70" class="img-fluid rounded shadow-sm">
+                            <div class="ml-3 d-inline-block align-middle">
+                                <h5 class="mb-0">
+                                    <a href="#" class="text-dark d-inline-block">@zubehör.Zubehör.ZubehörName</a>
+                                </h5>
+                                <span class="text-muted font-weight-normal font-italic">Category: Back to School</span>
+                            </div>
+                        </div>
+                    <td class="align-middle"><strong>@zubehör.Zubehör.ZubehörKosten CHF</strong></td>
+                </tr>
+            }
+            <tr>
+                <th scope="row">
+                    <div class="p-2">
+                        <div class="ml-3 d-inline-block align-middle">
+                            <h5 class="mb-0">
+                                <a href="#" class="text-dark d-inline-block">Nettokosten</a>
+                            </h5>
+                        </div>
+                    </div>
+                <td class="align-middle text-danger"><strong>@totalKosten CHF</strong></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="d-flex justify-content-end">
+    <a href="checkout" type="button" class="btn btn-primary rounded">Weiter</a>
+</div>
