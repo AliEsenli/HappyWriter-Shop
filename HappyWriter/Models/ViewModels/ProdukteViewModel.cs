@@ -12,7 +12,6 @@ namespace HappyWriter.Models.ViewModels
         public ProdukteViewModel(ApplicationDbContext context)
         {
             this.context = context;
-
             this.Produkte = context.Produkte.ToList();
         }
 

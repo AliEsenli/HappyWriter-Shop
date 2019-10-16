@@ -14,7 +14,6 @@ namespace HappyWriter.Models.ViewModels
         {
             this.produkt = produkt;
             this.context = context;
-
             this.Zubehör = context.Zubehöre.ToList();
         }
 

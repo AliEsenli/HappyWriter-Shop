@@ -50,10 +50,10 @@ namespace HappyWriter.Controllers
                 ViewBag.cart = cart;
             }
 
-            var zub = HttpContext.Session.GetObjectFromJson<List<KundeZubehör>>("Zubehör");
-            if (zub != null)
+            var zubehör = HttpContext.Session.GetObjectFromJson<List<KundeZubehör>>("Zubehör");
+            if (zubehör != null)
             {
-                ViewBag.zub = zub.ToList();
+                ViewBag.zubehör = zubehör.ToList();
             }
 
             var viewModel = new ProdukteViewModel(context);
@@ -80,23 +80,28 @@ namespace HappyWriter.Controllers
                 return NotFound();
             }
 
+            // Create a View Model pass the product and context
             var ProduktViewModel = new ProduktViewModel(produkt, context);
 
+            // retrun View Model
             return View(ProduktViewModel);
         }
 
 
         [Route("buy/{id}")]
-        public async Task<IActionResult> Buy(int id)
+        public IActionResult Buy(int id)
         {
-            var produkt = new Produkt {
+            var produkt = new Produkt
+            {
                 ProduktId = id,
                 Kosten = context.Produkte.FirstOrDefault(p => p.ProduktId == id).Kosten,
                 Name = context.Produkte.FirstOrDefault(p => p.ProduktId == id).Name
             };
 
+            // Serialize Object
             HttpContext.Session.SetObjectAsJson("Artikel", produkt);
- 
+
+            // Redirect to "BuyZubehör",  Controller = HomeController
             return RedirectToAction("BuyZubehör", "Home");
         }
 
@@ -104,7 +109,7 @@ namespace HappyWriter.Controllers
         [HttpGet]
         public async Task<IActionResult> BuyZubehör(int id)
         {
-            // 1. Produktliste laden um die Auswahl zu ermöglichen
+            // Produktliste laden um die Auswahl zu ermöglichen
             var zubehörListe = await context.Zubehöre.ToListAsync();
             ViewBag.ZubehörListe = zubehörListe;
 
@@ -112,25 +117,26 @@ namespace HappyWriter.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> BuyZubehör(ICollection<int> zubehörIds)
+        public IActionResult BuyZubehör(ICollection<int> zubehörIds)
         {
             var ausgewählteZubehöre = new List<KundeZubehör>();
 
             foreach (var zubehörId in zubehörIds)
             {
-                var selectedZubehör = new Zubehör {
+                var selectedZubehör = new Zubehör
+                {
                     ZubehörId = zubehörId,
                     ZubehörName = context.Zubehöre.FirstOrDefault(z => z.ZubehörId == zubehörId).ZubehörName,
                     ZubehörKosten = context.Zubehöre.FirstOrDefault(z => z.ZubehörId == zubehörId).ZubehörKosten
                 };
-                    
+
                 var ausgewählterZubehör = new KundeZubehör { Zubehör = selectedZubehör };
 
                 ausgewählteZubehöre.Add(ausgewählterZubehör);
             }
 
             HttpContext.Session.SetObjectAsJson("Zubehör", ausgewählteZubehöre);
-            
+
             return RedirectToAction("Index");
         }
 
@@ -147,7 +153,7 @@ namespace HappyWriter.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Checkout (int id)
+        public IActionResult Checkout(int id)
         {
             return View();
         }
