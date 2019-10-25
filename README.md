@@ -1,2 +1,2 @@
 # HappyWriter-Shop
-Session based shopping website project for module 151
+This is one of my school projects which is a basic session based shopping Website for module 151.
