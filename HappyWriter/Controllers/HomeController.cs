@@ -15,21 +15,21 @@ using Microsoft.AspNetCore.Identity;
 
 namespace HappyWriter.Controllers
 {
-        // Static SessionExtension Helper Class
-        public static class SessionExtensions
+    // Static SessionExtension Helper Class
+    public static class SessionExtensions
+    {
+        public static void SetObjectAsJson(this ISession session, string key, object value)
         {
-            public static void SetObjectAsJson(this ISession session, string key, object value)
-            {
-                session.SetString(key, JsonConvert.SerializeObject(value));
-            }
+            session.SetString(key, JsonConvert.SerializeObject(value));
+        }
 
-            public static T GetObjectFromJson<T>(this ISession session, string key)
-            {
-                var value = session.GetString(key);
+        public static T GetObjectFromJson<T>(this ISession session, string key)
+        {
+            var value = session.GetString(key);
 
             return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value);
-            }
         }
+    }
 
     public class HomeController : Controller
     {
@@ -45,7 +45,7 @@ namespace HappyWriter.Controllers
         public IActionResult Index()
         {
             var cart = HttpContext.Session.GetObjectFromJson<Produkt>("Artikel");
-            if(cart != null)
+            if (cart != null)
             {
                 ViewBag.cart = cart;
             }
@@ -117,7 +117,7 @@ namespace HappyWriter.Controllers
         }
 
         [HttpPost]
-        public IActionResult BuyZubehör(ICollection<int> zubehörIds)
+        public IActionResult BuyZubehör([FromForm] ICollection<int> zubehörIds)
         {
             var ausgewählteZubehöre = new List<KundeZubehör>();
 
@@ -175,9 +175,9 @@ namespace HappyWriter.Controllers
             selectedProducts.Add(selectedProduct);
 
 
-            foreach(var zubehör in zubehörListe)
+            foreach (var zubehör in zubehörListe)
             {
-                var selectedZubehör = new KundeZubehör { UserId = user.Id,  ZubehörId = zubehör.Zubehör.ZubehörId};
+                var selectedZubehör = new KundeZubehör { UserId = user.Id, ZubehörId = zubehör.Zubehör.ZubehörId };
                 selectedZubehöre.Add(selectedZubehör);
             }
 

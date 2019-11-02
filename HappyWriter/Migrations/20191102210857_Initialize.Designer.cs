@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HappyWriter.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191006093150_Init")]
-    partial class Init
+    [Migration("20191102210857_Initialize")]
+    partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
