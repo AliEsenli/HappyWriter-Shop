@@ -20,7 +20,7 @@
                 <h3 class="mb-3 text-primary">HappyWriter Shop</h3>
                 <div class="font-18 text-center">Login to Your Account</div>
             </div>
-            <form id="account" method="post" autocomplete="off">
+            <form id="account" method="post">
                 <div class="mb-4">
                     <div class="md-form mb-0">
                         <input asp-for="Input.Email" id="email" class="md-form-control">
@@ -38,12 +38,13 @@
                 <div class="flexbox mb-5">
                     <label asp-for="Input.RememberMe" class="ui-switch switch-solid">
                         <input asp-for="Input.RememberMe">
-                        <span class="ml-0"></span> @Html.DisplayNameFor(m => m.Input.RememberMe)
+                        <span class="ml-0"></span>
+                        <div class="unselectable">@Html.DisplayNameFor(m => m.Input.RememberMe)</div>
                     </label>
                 </div>
                 <button class="btn btn-primary btn-rounded btn-block" type="submit">Login</button>
                 <p class="text-center mt-3 mb-3 p-0">Dont Have an Account?</p>
-                <a  class="btn btn-dark btn-rounded btn-block" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                <a class="btn btn-dark btn-rounded btn-block" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
             </form>
             <div class="text-center mt-5 font-13">
                 <div class="mb-2 text-muted">2019 © All rights reserved</div>
