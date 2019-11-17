@@ -91,6 +91,13 @@
     </div>
 
     <div class="d-flex justify-content-end">
+        <form asp-action="CancelOrder" asp-controller="home" method="post" class="mr-1">
+            <button type="submit" class="btn btn-danger">Warenkorb löschen</button>
+        </form>
         <a href="home/bestellübersicht" role="button" class="btn btn-primary">Checkout</a>
     </div>
+}
+else
+{
+    <p class="font-weight-light">Ihr Warenkorb ist derzeit leer.</p>
 }

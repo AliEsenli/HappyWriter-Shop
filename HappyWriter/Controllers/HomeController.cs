@@ -60,11 +60,6 @@ namespace HappyWriter.Controllers
             return View(viewModel);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         // GET: Home/Produkt/1
         public async Task<IActionResult> Produkt(int? id)
         {
@@ -87,7 +82,6 @@ namespace HappyWriter.Controllers
             return View(ProduktViewModel);
         }
 
-
         [Route("buy/{id}")]
         public IActionResult Buy(int id)
         {
@@ -104,7 +98,6 @@ namespace HappyWriter.Controllers
             // Redirect to "BuyZubehör",  Controller = HomeController
             return RedirectToAction("BuyZubehör", "Home");
         }
-
 
         [HttpGet]
         public async Task<IActionResult> BuyZubehör(int id)
@@ -174,13 +167,14 @@ namespace HappyWriter.Controllers
             var selectedProduct = new KundeProdukt { UserId = user.Id, ProduktId = produkt.ProduktId };
             selectedProducts.Add(selectedProduct);
 
-
-            foreach (var zubehör in zubehörListe)
+            if (zubehörListe != null)
             {
-                var selectedZubehör = new KundeZubehör { UserId = user.Id, ZubehörId = zubehör.Zubehör.ZubehörId };
-                selectedZubehöre.Add(selectedZubehör);
+                foreach (var zubehör in zubehörListe)
+                {
+                    var selectedZubehör = new KundeZubehör { UserId = user.Id, ZubehörId = zubehör.Zubehör.ZubehörId };
+                    selectedZubehöre.Add(selectedZubehör);
+                }
             }
-
             // die vorbereitete Struktur dem Datenbankkontext übergeben (ab jetzt ist es im Speicher)
             await context.AddRangeAsync(selectedProducts);
             await context.AddRangeAsync(selectedZubehöre);
@@ -195,7 +189,21 @@ namespace HappyWriter.Controllers
             return RedirectToAction("Dankeschön", "Home");
         }
 
+        [HttpPost]
+        public IActionResult CancelOrder()
+        {
+            HttpContext.Session.Remove("Artikel");
+            HttpContext.Session.Remove("Zubehör");
+
+            return RedirectToAction("Index", "Home");
+        }
+
         public IActionResult Dankeschön()
+        {
+            return View();
+        }
+
+        public IActionResult Privacy()
         {
             return View();
         }

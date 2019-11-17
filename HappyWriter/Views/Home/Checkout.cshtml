@@ -6,7 +6,13 @@
 
 <p>Payment Stuff Here...</p>
 
-<form asp-action="Checkout" asp-controller="Home" method="post">
-    <button type="submit" class="btn btn-primary">Bestellung abschliessen</button>
-</form>
+<div class="d-flex">
+    <form asp-action="CancelOrder" asp-controller="home" method="post" class="mr-1">
+        <button type="submit" class="btn badge-danger">Bestellung löschen</button>
+    </form>
+
+    <form asp-action="Checkout" asp-controller="home" method="post">
+        <button type="submit" class="btn badge-primary">Bestellung abschliessen</button>
+    </form>
+</div>
 

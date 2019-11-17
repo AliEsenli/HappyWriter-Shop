@@ -15,7 +15,12 @@ namespace HappyWriter.Models.ViewModels
         {
             this.user = user;
             this.produkt = produkt;
-            this.Zubehöre = zubehöre;
+
+            if (zubehöre != null)
+            {
+                this.Zubehöre = zubehöre;
+                TotalKostenZubehör = Zubehöre.Sum(z => z.Zubehör.ZubehörKosten);
+            }
         }
 
         public string UserName => user.Name;
@@ -25,7 +30,7 @@ namespace HappyWriter.Models.ViewModels
         public string Ort => user.Wohnort;
         public string ProduktName => produkt.Name;
         public decimal ProduktKosten => produkt.Kosten;
-        public decimal TotalKostenZubehör => Zubehöre.Sum(p => p.Zubehör.ZubehörKosten);
+        public decimal TotalKostenZubehör;
         public List<KundeZubehör> Zubehöre { get; }
     }
 }
