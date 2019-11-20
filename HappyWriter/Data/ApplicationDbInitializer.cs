@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HappyWriter.Data
 {
-    // Seed Admin and Admin Role in Database and add Admin to Admin Role.
+    // Seed Admin and asign him to his Role in Database.
     public class ApplicationDbInitializer
     {
         public static void SeedUsers(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
@@ -43,7 +43,7 @@ namespace HappyWriter.Data
                 IdentityResult result = userManager.CreateAsync(user, "Klapp42stuhl!").Result;
                 if (result.Succeeded)
                 {
-                    // Asign Admin Role
+                    // Asign Admin Role and wait until its finished
                     userManager.AddToRoleAsync(user, "Admin").Wait();
                 }
             }

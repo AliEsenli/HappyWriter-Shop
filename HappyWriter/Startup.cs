@@ -43,7 +43,7 @@ namespace HappyWriter
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            // Custom Identity Model Ali
+            // Custom Identity Model Ali |
             services.AddIdentityCore<ApplicationUser>()
                 .AddRoles<IdentityRole>()
                 .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory<ApplicationUser, IdentityRole>>()
@@ -53,7 +53,9 @@ namespace HappyWriter
             //
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddDistributedMemoryCache(); 
+            services.AddDistributedMemoryCache();
+
+            // Terminate Session | Ali
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
@@ -74,6 +76,8 @@ namespace HappyWriter
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            // Call this function to seed Admin user and asign him to his role | Ali
             ApplicationDbInitializer.SeedUsers(userManager, roleManager);
 
             app.UseHttpsRedirection();
@@ -81,6 +85,7 @@ namespace HappyWriter
             app.UseAuthentication();
             app.UseCookiePolicy();
 
+            // App User Session | Ali
             app.UseSession();
             app.UseAuthentication();
 

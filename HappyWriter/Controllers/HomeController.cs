@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace HappyWriter.Controllers
 {
-    // Static SessionExtension Helper Class
+    // Static SessionExtension Helper Class. Used for Serializing/Deserialzing Objects.
     public static class SessionExtensions
     {
         public static void SetObjectAsJson(this ISession session, string key, object value)
@@ -42,6 +42,7 @@ namespace HappyWriter.Controllers
             this.userManager = userManager;
         }
 
+        // Check if there are Products saved in Session. If so display them on the Index site.
         public IActionResult Index()
         {
             var cart = HttpContext.Session.GetObjectFromJson<Produkt>("Artikel");
@@ -76,12 +77,13 @@ namespace HappyWriter.Controllers
             }
 
             // Create a View Model pass the product and context
-            var ProduktViewModel = new ProduktViewModel(produkt, context);
+            var ProduktViewModel = new ZubehöreViewModel(produkt, context);
 
-            // retrun View Model
+            // return View Model
             return View(ProduktViewModel);
         }
 
+        // Product site when user clicks on a specific article
         [Route("buy/{id}")]
         public IActionResult Buy(int id)
         {
@@ -92,7 +94,7 @@ namespace HappyWriter.Controllers
                 Name = context.Produkte.FirstOrDefault(p => p.ProduktId == id).Name
             };
 
-            // Serialize Object
+            // Save Product to Session using Session Extension class 
             HttpContext.Session.SetObjectAsJson("Artikel", produkt);
 
             // Redirect to "BuyZubehör",  Controller = HomeController
@@ -112,6 +114,7 @@ namespace HappyWriter.Controllers
         [HttpPost]
         public IActionResult BuyZubehör([FromForm] ICollection<int> zubehörIds)
         {
+            // Struktur erstellen welche von EF verstanden wird
             var ausgewählteZubehöre = new List<KundeZubehör>();
 
             foreach (var zubehörId in zubehörIds)
@@ -123,11 +126,12 @@ namespace HappyWriter.Controllers
                     ZubehörKosten = context.Zubehöre.FirstOrDefault(z => z.ZubehörId == zubehörId).ZubehörKosten
                 };
 
+                // ein Verbindungsobjekt mit der KundenId und der selektierten ProduktId erstellen
                 var ausgewählterZubehör = new KundeZubehör { Zubehör = selectedZubehör };
-
                 ausgewählteZubehöre.Add(ausgewählterZubehör);
             }
 
+            // Save Equipments to Session using Session Extension class 
             HttpContext.Session.SetObjectAsJson("Zubehör", ausgewählteZubehöre);
 
             return RedirectToAction("Index");
@@ -136,11 +140,14 @@ namespace HappyWriter.Controllers
         [Authorize]
         public async Task<IActionResult> Bestellübersicht(int id)
         {
+            // Get current User using Identity UserManager
             var user = await userManager.FindByEmailAsync(User.Identity.Name);
 
+            // Get Products out of Session by deserializing them using the Session Extension class
             var produkt = HttpContext.Session.GetObjectFromJson<Produkt>("Artikel");
             var zubehörListe = HttpContext.Session.GetObjectFromJson<List<KundeZubehör>>("Zubehör");
 
+            // Create a viewmodel and return it to View
             var viewModel = new CheckoutViewModel(user, produkt, zubehörListe);
             return View(viewModel);
         }
@@ -185,6 +192,7 @@ namespace HappyWriter.Controllers
             // Session beenden und Daten löschen
             HttpContext.Session.Remove("Artikel");
             HttpContext.Session.Remove("Zubehör");
+
             // auf Checkout-Seite weiterleiten
             return RedirectToAction("Dankeschön", "Home");
         }
@@ -192,17 +200,20 @@ namespace HappyWriter.Controllers
         [HttpPost]
         public IActionResult CancelOrder()
         {
+            // Session entfernen Artikel & Zubehör
             HttpContext.Session.Remove("Artikel");
             HttpContext.Session.Remove("Zubehör");
 
             return RedirectToAction("Index", "Home");
         }
 
+        // Thank you Page
         public IActionResult Dankeschön()
         {
             return View();
         }
 
+        // Privacy and Cookie Policy Page
         public IActionResult Privacy()
         {
             return View();

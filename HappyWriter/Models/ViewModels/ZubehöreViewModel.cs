@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace HappyWriter.Models.ViewModels
 {
-    public class ProduktViewModel
+    public class ZubehöreViewModel
     {
         private readonly Produkt produkt;
         private readonly ApplicationDbContext context;
-        public ProduktViewModel(Produkt produkt, ApplicationDbContext context)
+        public ZubehöreViewModel(Produkt produkt, ApplicationDbContext context)
         {
             this.produkt = produkt;
             this.context = context;
